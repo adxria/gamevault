@@ -1,14 +1,16 @@
 import java.util.Objects;
+import java.util.Set;
 
 public class RegisterCommand extends Command {
     public RegisterCommand() {
         super("register",
               "register <USERNAME> <PASSWORD> <PASSWORD>",
-              "registers an account");
+              "registers an account",
+              Set.of(UserRole.GUEST, UserRole.ADMIN));
     }
 
     @Override
-    void execute(String[] tokens) {
+    public void execute(String[] tokens) {
         if (!Objects.equals(tokens[2], tokens[3])) {
             System.out.println("Error! Passwords don't match. Retry again.");
             return;

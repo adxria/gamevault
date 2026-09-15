@@ -25,9 +25,18 @@ public enum Cli {
     }
 
     Cli() {
+        // Users related commands
         addCommand(new LoginCommand());
         addCommand(new RegisterCommand());
         addCommand(new HelpCommand());
+        addCommand(new LogoutCommand());
+        addCommand(new QuitCommand());
+
+        // Games related commands
+        addCommand(new ListCommand());
+        addCommand(new AddCommand());
+        addCommand(new RemoveCommand());
+        addCommand(new EditCommand());
     }
 
     public Map<String, Command> getCommands() {

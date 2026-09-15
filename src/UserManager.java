@@ -4,23 +4,27 @@ import java.util.Objects;
 public enum UserManager {
     INSTANCE;
 
-    private final HashMap<String, String> users = new HashMap<>();
-    private String currentUser = "";
+    private final HashMap<String, User> users = new HashMap<>();
+    private final User guestInstance = new User();
+    private User currentUser;
 
     UserManager() {
-        this.users.put("admin", "password");
+        this.registerUser("admin", "password");
+        this.users.get("admin").setRole(UserRole.ADMIN);
+        this.logout();
     }
 
-    public String getCurrentUser() {
-        return currentUser;
-    }
+    public User getCurrentUser() { return currentUser; }
 
     public void signIn(String username, String password) {
-        if ( !Objects.equals(users.get(username), password) ) {
+        if ( !Objects.equals(users.get(username).getPassword(), password) ) {
             throw new AuthenticationException("Invalid username or password.");
         }
 
-        this.currentUser = username;
+        this.currentUser = users.get(username);
+        // FIXME(adoria): this should not be here:
+        System.out.println("Hello, " + UserManager.INSTANCE.getCurrentUser().getUsername() + "!");
+        Cli.INSTANCE.getCommands().get("help").execute(null);
     }
 
     public void registerUser(String username, String password) {
@@ -28,6 +32,9 @@ public enum UserManager {
             throw new AuthenticationException("This username is already taken.");
         }
 
-        this.users.put(username, password);
+        User user = new User(username, password, UserRole.DEFAULT);
+        this.users.put(user.getUsername(), user);
     }
+
+    public void logout() { this.currentUser = this.guestInstance; }
 }
