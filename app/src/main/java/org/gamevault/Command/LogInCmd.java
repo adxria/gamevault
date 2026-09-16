@@ -1,5 +1,6 @@
 package org.gamevault.Command;
 
+import org.gamevault.Cli;
 import org.gamevault.UserManager;
 import org.gamevault.UserRole;
 
@@ -28,7 +29,7 @@ public class LogInCmd extends Cmd {
 
         // FIXME(adoria): error handling...
         UserManager.INSTANCE.logIn(args[0], args[1]);
-
-        return CmdResult.success("Successfully logged in as " + args[0] + ".\n");
+        String helpOutput = Cli.INSTANCE.getCommands().get("help").execute().getOutput();
+        return CmdResult.success("Successfully logged in as " + args[0] + ".\n" + helpOutput);
     }
 }

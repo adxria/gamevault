@@ -19,6 +19,11 @@ public enum Cli {
         registerCmd(new SignUpCmd());
         registerCmd(new LogInCmd());
         registerCmd(new LogOutCmd());
+
+        registerCmd(new AddGameCmd());
+        registerCmd(new EditGameCmd());
+        registerCmd(new ListGamesCmd());
+        registerCmd(new RemoveGameCmd());
     }
 
     public void acceptInput() {
