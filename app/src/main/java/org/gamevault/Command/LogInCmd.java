@@ -1,10 +1,18 @@
 package org.gamevault.Command;
 
 import org.gamevault.UserManager;
+import org.gamevault.UserRole;
+
+import java.util.Set;
 
 public class LogInCmd extends Cmd {
     public LogInCmd() {
-        super("log-in", "Logs user into the system.", "log-in <USERNAME> <PASSWORD>");
+        super(
+                "log-in",
+                "log-in <USERNAME> <PASSWORD>",
+                "Logs user into the system.",
+                Set.of(UserRole.GUEST)
+        );
     }
 
     @Override
@@ -19,7 +27,7 @@ public class LogInCmd extends Cmd {
         String[] args = rawArgs.split("\\s+");
 
         // FIXME(adoria): error handling...
-        UserManager.INSTANCE.logInAs(args[0], args[1]);
+        UserManager.INSTANCE.logIn(args[0], args[1]);
 
         return CmdResult.success("Successfully logged in as " + args[0] + ".\n");
     }

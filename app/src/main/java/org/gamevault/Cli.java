@@ -16,8 +16,9 @@ public enum Cli {
     Cli() {
         // TODO(adoria): maybe there is a better way to do that...
         registerCmd(new HelpCmd());
-        registerCmd(new LogInCmd());
         registerCmd(new SignUpCmd());
+        registerCmd(new LogInCmd());
+        registerCmd(new LogOutCmd());
     }
 
     public void acceptInput() {
@@ -39,6 +40,12 @@ public enum Cli {
 
         if (!this.commands.containsKey(keyword)) {
             System.out.println("Error! Unknown command: " + keyword);
+            return;
+        }
+
+        Cmd cmd = this.commands.get(keyword);
+        if (!cmd.getAllowedRoles().contains(UserManager.INSTANCE.getCurrentUser().getRole())) {
+            System.out.println("Error! You are not allowed to use this command.");
             return;
         }
 

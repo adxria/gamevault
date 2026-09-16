@@ -1,20 +1,25 @@
 package org.gamevault.Command;
 
+import org.gamevault.UserRole;
+
+import java.util.Set;
+
 public abstract class Cmd {
-    String name;
-    String usage;
-    String description;
+    private final String name;
+    private final String usage;
+    private final String description;
+    private final Set<UserRole> allowedRoles;
 
-    Cmd(String name, String description) {
-        this.name = name;
-        this.usage = this.name;
-        this.description = description;
-    }
 
-    Cmd(String name, String description, String usage) {
+    Cmd(String name, String usage, String description, Set<UserRole> allowedRoles) {
         this.name = name;
         this.usage = usage;
         this.description = description;
+        this.allowedRoles = allowedRoles;
+    }
+
+    Cmd(String name, String description, Set<UserRole> allowedRoles) {
+        this(name, name, description, allowedRoles);
     }
 
     public String getName() {
@@ -27,6 +32,10 @@ public abstract class Cmd {
 
     public String getDescription() {
         return description;
+    }
+
+    public Set<UserRole> getAllowedRoles() {
+        return allowedRoles;
     }
 
     // TODO(adoria): I need to make my auto-reformatter crop long comments to fit into 120 chars

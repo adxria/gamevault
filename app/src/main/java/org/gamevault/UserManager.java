@@ -5,10 +5,17 @@ import java.util.Map;
 
 public enum UserManager {
     INSTANCE;
-    private User currentUser;
-    Map<String, User> users = new HashMap<>();
+    private final User guestInstance = new User();
+    private final Map<String, User> users = new HashMap<>();
+    private User currentUser = guestInstance;
 
-    public void logInAs(String username, String password) {
+    UserManager() {
+        User admin = new User("admin", "pass");
+        admin.elevateRole();
+        addUser(admin);
+    }
+
+    public void logIn(String username, String password) {
         // FIXME(adoria): the user may be inexistent...
         // incorrect username error
         User user = this.users.get(username);
@@ -18,6 +25,10 @@ public enum UserManager {
         } else {
             // FIXME(adoria): Incorrect password error.
         }
+    }
+
+    public void logOut() {
+        this.currentUser = guestInstance;
     }
 
     public User getCurrentUser() {

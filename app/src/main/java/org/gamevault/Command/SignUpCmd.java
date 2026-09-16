@@ -2,12 +2,19 @@ package org.gamevault.Command;
 
 import org.gamevault.User;
 import org.gamevault.UserManager;
+import org.gamevault.UserRole;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class SignUpCmd extends Cmd {
     public SignUpCmd() {
-        super("sign-up", "Registers a new user.", "sign-up <USERNAME> <PASSWORD> <CONFIRM>");
+        super(
+                "sign-up",
+                "sign-up <USERNAME> <PASSWORD> <CONFIRM>",
+                "Registers a new user.",
+                Set.of(UserRole.GUEST, UserRole.ADMIN)
+        );
     }
 
     @Override

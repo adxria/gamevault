@@ -9,9 +9,9 @@ public class CmdResult {
         this.output = output;
     }
 
-    static CmdResult success() {
-        return new CmdResult(true, null);
-    }
+//    static CmdResult success() {
+//        return new CmdResult(true, null);
+//    }
 
     static CmdResult success(String output) {
         return new CmdResult(true, output);
