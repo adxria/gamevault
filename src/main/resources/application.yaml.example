@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: gamevault
+  datasource:
+    url: jdbc:postgresql://localhost:<<PORT>>/<<DB>>
+    username: <<USERNAME>>
+    password: <<PASSWORD>>
+  jpa:
+    hibernate:
+      ddl-auto: update
