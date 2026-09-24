@@ -10,49 +10,42 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/games")
 public class GameController {
-    private final GameRepository gameRepository;
+    //    private final GameRepository gameRepository;
+    private final GameService gameService;
 
-    public GameController(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
+    public GameController(GameService gameService) {
+        this.gameService = gameService;
     }
 
     @GetMapping
     public List<Game> getGames() {
-        return gameRepository.findAll();
+        return gameService.getAllGames();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Game> getGame(@PathVariable Long id) {
-        Optional<Game> game = gameRepository.findById(id);
+        Optional<Game> game = gameService.getGameById(id);
         return game.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Game createGame(@RequestBody Game game) {
-        return gameRepository.save(game);
+        return gameService.createGame(game);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
-        if (!gameRepository.existsById(id)) {
+        if (gameService.deleteGame(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
             return ResponseEntity.notFound().build();
         }
-
-        gameRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game request) {
-        Optional<Game> gameOptional = gameRepository.findById(id);
-        if (gameOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Game game = gameOptional.get();
-        game.setTitle(request.getTitle());
-        game.setReleaseDate(request.getReleaseDate());
-        return ResponseEntity.ok(gameRepository.save(game));
+        Optional<Game> game = gameService.updateGame(id, request);
+        return game.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
