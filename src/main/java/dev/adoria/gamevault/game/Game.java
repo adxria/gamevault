@@ -16,7 +16,10 @@ public class Game {
     private String title;
     private LocalDate releaseDate;
 
-    public Game() {}
+    public Game(String title, LocalDate releaseDate) {
+        this.title = title;
+        this.releaseDate = releaseDate;
+    }
 
     public Long getId() {
         return id;
