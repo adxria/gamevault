@@ -2,6 +2,7 @@ package dev.adoria.gamevault.game;
 
 import dev.adoria.gamevault.game.dto.GameRequest;
 import dev.adoria.gamevault.game.dto.GameResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class GameController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GameResponse createGame(@RequestBody GameRequest request) {
+    public GameResponse createGame(@Valid @RequestBody GameRequest request) {
         Game gameToCreate = new Game(request.title(), request.releaseDate());
         Game savedGame = gameService.createGame(gameToCreate);
         return GameResponse.from(savedGame);
@@ -50,7 +51,7 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GameResponse> updateGame(@PathVariable Long id, @RequestBody GameRequest request) {
+    public ResponseEntity<GameResponse> updateGame(@PathVariable Long id, @Valid @RequestBody GameRequest request) {
         Game newData = new Game(request.title(), request.releaseDate());
         Optional<Game> gameOptional = gameService.updateGame(id, newData);
 
