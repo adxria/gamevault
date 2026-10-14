@@ -1,6 +1,7 @@
 package dev.adoria.gamevault.game;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    @Transactional
     public boolean deleteGame(Long id) {
         if (!gameRepository.existsById(id)) {
             return false;
@@ -33,6 +35,7 @@ public class GameService {
         return true;
     }
 
+    @Transactional
     public Optional<Game> updateGame(Long id, Game request) {
         Optional<Game> gameOptional = gameRepository.findById(id);
         if (gameOptional.isEmpty()) {

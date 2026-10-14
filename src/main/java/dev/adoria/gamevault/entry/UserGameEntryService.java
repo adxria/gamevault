@@ -7,6 +7,7 @@ import dev.adoria.gamevault.game.GameRepository;
 import dev.adoria.gamevault.user.User;
 import dev.adoria.gamevault.user.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserGameEntryService {
@@ -21,6 +22,7 @@ public class UserGameEntryService {
         this.gameRepository = gameRepository;
     }
 
+    @Transactional
     public UserGameEntry createEntry(Long userId, Long gameId, GameStatus status, Double score) {
         User user = userRepository.findById(userId).orElseThrow(()
             -> new ResourceNotFoundException("User with id " + userId + " not found"));
