@@ -60,6 +60,10 @@ public class UserGameEntry {
         return game.getId();
     }
 
+    public String getGameTitle() {
+        return game.getTitle();
+    }
+
     public GameStatus getStatus() {
         return status;
     }

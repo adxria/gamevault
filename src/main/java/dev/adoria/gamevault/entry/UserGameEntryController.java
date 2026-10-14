@@ -4,8 +4,9 @@ import dev.adoria.gamevault.entry.dto.UserGameEntryRequest;
 import dev.adoria.gamevault.entry.dto.UserGameEntryResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users/{userId}/entries")
@@ -23,5 +24,11 @@ public class UserGameEntryController {
         UserGameEntry entry = userGameEntryService.createEntry(userId, request.gameId(), request.status(),
             request.score());
         return UserGameEntryResponse.from(entry);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserGameEntryResponse> findAll(@PathVariable Long userId) {
+        return userGameEntryService.getEntriesForUser(userId);
     }
 }

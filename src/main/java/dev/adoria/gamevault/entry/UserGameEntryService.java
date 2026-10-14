@@ -1,5 +1,6 @@
 package dev.adoria.gamevault.entry;
 
+import dev.adoria.gamevault.entry.dto.UserGameEntryResponse;
 import dev.adoria.gamevault.exception.DuplicateEntryException;
 import dev.adoria.gamevault.exception.ResourceNotFoundException;
 import dev.adoria.gamevault.game.Game;
@@ -8,6 +9,8 @@ import dev.adoria.gamevault.user.User;
 import dev.adoria.gamevault.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserGameEntryService {
@@ -36,5 +39,14 @@ public class UserGameEntryService {
         }
 
         return userGameEntryRepository.save(new UserGameEntry(user, game, status, score));
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserGameEntryResponse> getEntriesForUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found");
+        }
+
+        return userGameEntryRepository.findByUser_Id(userId).stream().map(UserGameEntryResponse::from).toList();
     }
 }
