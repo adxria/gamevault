@@ -16,6 +16,7 @@ public class Game {
     private String title;
     private LocalDate releaseDate;
 
+    // NOTE(adoria): This no-argument constructor is mandatory by hibernate
     protected Game() {
     }
 
