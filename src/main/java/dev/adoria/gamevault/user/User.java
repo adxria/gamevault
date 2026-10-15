@@ -34,6 +34,10 @@ public class User {
         this.email = normalize(email);
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setEmail(String email) {
         this.email = normalize(email);
     }

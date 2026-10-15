@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gamevault_test
+    username: gamevault_app
+    password: ${GAMEVAULT_TEST_DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
