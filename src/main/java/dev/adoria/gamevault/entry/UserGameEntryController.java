@@ -2,6 +2,7 @@ package dev.adoria.gamevault.entry;
 
 import dev.adoria.gamevault.entry.dto.UserGameEntryRequest;
 import dev.adoria.gamevault.entry.dto.UserGameEntryResponse;
+import dev.adoria.gamevault.entry.dto.UserGameEntryUpdateRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,11 @@ public class UserGameEntryController {
     @ResponseStatus(HttpStatus.OK)
     public List<UserGameEntryResponse> findAll(@PathVariable Long userId) {
         return userGameEntryService.getEntriesForUser(userId);
+    }
+
+    @PutMapping("/{entryId}")
+    public UserGameEntryResponse updateEntry(@PathVariable Long entryId, @PathVariable Long userId,
+                                             @Valid @RequestBody UserGameEntryUpdateRequest request) {
+        return userGameEntryService.updateEntry(entryId, userId, request.status(), request.score());
     }
 }

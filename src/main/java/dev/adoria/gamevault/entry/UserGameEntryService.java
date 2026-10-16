@@ -49,4 +49,13 @@ public class UserGameEntryService {
 
         return userGameEntryRepository.findByUser_Id(userId).stream().map(UserGameEntryResponse::from).toList();
     }
+
+    @Transactional
+    public UserGameEntryResponse updateEntry(Long entryId, Long userId, GameStatus status, Double score) {
+        UserGameEntry entry = userGameEntryRepository.findByIdAndUser_Id(entryId, userId).orElseThrow(()
+            -> new ResourceNotFoundException("Entry with id " + entryId + " not found for user " + userId));
+        entry.setStatus(status);
+        entry.setScore(score);
+        return UserGameEntryResponse.from(entry);
+    }
 }

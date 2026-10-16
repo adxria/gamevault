@@ -64,8 +64,16 @@ public class UserGameEntry {
         return game.getTitle();
     }
 
+    public void setStatus(GameStatus status) {
+        this.status = status;
+    }
+
     public GameStatus getStatus() {
         return status;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 
     public Double getScore() {
