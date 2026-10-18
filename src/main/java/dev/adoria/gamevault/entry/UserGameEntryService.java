@@ -58,4 +58,12 @@ public class UserGameEntryService {
         entry.setScore(score);
         return UserGameEntryResponse.from(entry);
     }
+
+    @Transactional
+    public void deleteEntry(Long entryId, Long userId) {
+        UserGameEntry entry = userGameEntryRepository.findByIdAndUser_Id(entryId, userId).orElseThrow(()
+            -> new ResourceNotFoundException("Entry with id " + entryId + " not found for user " + userId));
+
+        userGameEntryRepository.delete(entry);
+    }
 }

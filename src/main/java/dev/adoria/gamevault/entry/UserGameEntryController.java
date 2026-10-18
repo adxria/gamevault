@@ -5,6 +5,7 @@ import dev.adoria.gamevault.entry.dto.UserGameEntryResponse;
 import dev.adoria.gamevault.entry.dto.UserGameEntryUpdateRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +38,11 @@ public class UserGameEntryController {
     public UserGameEntryResponse updateEntry(@PathVariable Long entryId, @PathVariable Long userId,
                                              @Valid @RequestBody UserGameEntryUpdateRequest request) {
         return userGameEntryService.updateEntry(entryId, userId, request.status(), request.score());
+    }
+
+    @DeleteMapping("/{entryId}")
+    public ResponseEntity<Void> deleteEntry(@PathVariable Long entryId, @PathVariable Long userId) {
+        userGameEntryService.deleteEntry(entryId, userId);
+        return ResponseEntity.noContent().build();
     }
 }
