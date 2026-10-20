@@ -37,12 +37,30 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleDataIntegrity(DataIntegrityViolationException ex) {
         String message = ex.getMostSpecificCause().getMessage();
 
-        if (message != null && message.contains("uk_user_game_entry_user_id_game_id")) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error",
-                "Entry already exists for this user and game"));
+        if (message != null) {
+            if (message.contains("uk_user_game_entry_user_id_game_id")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error",
+                    "Entry already exists for this user and game"));
+            } else if (message.contains("uk_users_username")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error",
+                    "Username is already in use"));
+            } else if (message.contains("uk_users_email")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error",
+                    "Email is already in use"));
+            }
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error",
             "Data integrity violation"));
+    }
+
+    @ExceptionHandler(DuplicateUserException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicateUser(DuplicateUserException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPassword(InvalidPasswordException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("password", ex.getMessage()));
     }
 }

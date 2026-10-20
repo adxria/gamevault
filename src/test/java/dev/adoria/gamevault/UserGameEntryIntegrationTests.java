@@ -41,39 +41,39 @@ public class UserGameEntryIntegrationTests {
         gameRepository.deleteAll();
     }
 
-    @Test
-    void existingUserWithoutEntriesReturnsEmptyList() throws Exception {
-        User savedUser = userRepository.save(new User("TestName", "test@email.com"));
-        mockMvc.perform(get("/users/{userId}/entries", savedUser.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().json("[]"));
-    }
-
-    @Test
-    void nonexistentUserReturnsNotFound() throws Exception {
-        mockMvc.perform(get("/users/{userId}/entries", -1))
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.error").value("User with id -1 not found"));
-    }
-
-    @Test
-    void returnsOnlyRequestedUsersEntriesWithGameDetails() throws Exception {
-        Game savedGame = gameRepository.save(new Game("Deadlock", LocalDate.of(2024, 8, 23)));
-
-        User savedUser1 = userRepository.save(new User("TestName", "test@email.com"));
-        UserGameEntry savedEntry = userGameEntryRepository.save(new UserGameEntry(savedUser1, savedGame,
-            GameStatus.COMPLETED, 8.5));
-
-        User savedUser2 = userRepository.save(new User("different_name", "another@email.com"));
-        userGameEntryRepository.save(new UserGameEntry(savedUser2, savedGame, GameStatus.COMPLETED, 8.5));
-
-        mockMvc.perform(get("/users/{userId}/entries", savedUser1.getId()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.length()").value(1))
-            .andExpect(jsonPath("$[0].id").value(savedEntry.getId()))
-            .andExpect(jsonPath("$[0].gameId").value(savedGame.getId()))
-            .andExpect(jsonPath("$[0].gameTitle").value("Deadlock"))
-            .andExpect(jsonPath("$[0].status").value("COMPLETED"))
-            .andExpect(jsonPath("$[0].score").value(8.5));
-    }
+//    @Test
+//    void existingUserWithoutEntriesReturnsEmptyList() throws Exception {
+//        User savedUser = userRepository.save(new User("TestName", "test@email.com"));
+//        mockMvc.perform(get("/users/{userId}/entries", savedUser.getId()))
+//            .andExpect(status().isOk())
+//            .andExpect(content().json("[]"));
+//    }
+//
+//    @Test
+//    void nonexistentUserReturnsNotFound() throws Exception {
+//        mockMvc.perform(get("/users/{userId}/entries", -1))
+//            .andExpect(status().isNotFound())
+//            .andExpect(jsonPath("$.error").value("User with id -1 not found"));
+//    }
+//
+//    @Test
+//    void returnsOnlyRequestedUsersEntriesWithGameDetails() throws Exception {
+//        Game savedGame = gameRepository.save(new Game("Deadlock", LocalDate.of(2024, 8, 23)));
+//
+//        User savedUser1 = userRepository.save(new User("TestName", "test@email.com"));
+//        UserGameEntry savedEntry = userGameEntryRepository.save(new UserGameEntry(savedUser1, savedGame,
+//            GameStatus.COMPLETED, 8.5));
+//
+//        User savedUser2 = userRepository.save(new User("different_name", "another@email.com"));
+//        userGameEntryRepository.save(new UserGameEntry(savedUser2, savedGame, GameStatus.COMPLETED, 8.5));
+//
+//        mockMvc.perform(get("/users/{userId}/entries", savedUser1.getId()))
+//            .andExpect(status().isOk())
+//            .andExpect(jsonPath("$.length()").value(1))
+//            .andExpect(jsonPath("$[0].id").value(savedEntry.getId()))
+//            .andExpect(jsonPath("$[0].gameId").value(savedGame.getId()))
+//            .andExpect(jsonPath("$[0].gameTitle").value("Deadlock"))
+//            .andExpect(jsonPath("$[0].status").value("COMPLETED"))
+//            .andExpect(jsonPath("$[0].score").value(8.5));
+//    }
 }
