@@ -60,4 +60,8 @@ public class User {
     public String getDisplayName() {
         return displayName;
     }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
 }
