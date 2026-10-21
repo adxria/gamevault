@@ -2,6 +2,7 @@ package dev.adoria.gamevault.user;
 
 import dev.adoria.gamevault.exception.DuplicateUserException;
 import dev.adoria.gamevault.exception.InvalidPasswordException;
+import dev.adoria.gamevault.exception.ResourceNotFoundException;
 import dev.adoria.gamevault.user.dto.UserResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,13 @@ public class UserService {
         User savedUser = userRepository.save(new User(normalizedUsername, username, normalizedEmail,
             encoder.encode(rawPassword)));
         return UserResponse.from(savedUser);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse getByUsername(String username) {
+        String normalizedUsername = User.normalize(username);
+        User user = userRepository.findByUsername(normalizedUsername).orElseThrow(()
+            -> new ResourceNotFoundException("Username " + normalizedUsername + " not found"));
+        return UserResponse.from(user);
     }
 }

@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -19,5 +21,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse registerUser(@Valid @RequestBody UserRegistrationRequest request) {
         return userService.register(request.username(), request.email(), request.password());
+    }
+
+    @GetMapping("/me")
+    public UserResponse getCurrentUser(Principal principal) {
+        return userService.getByUsername(principal.getName());
     }
 }
