@@ -7,6 +7,7 @@ import dev.adoria.gamevault.game.Game;
 import dev.adoria.gamevault.game.GameRepository;
 import dev.adoria.gamevault.user.User;
 import dev.adoria.gamevault.user.UserRepository;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,18 @@ public class UserGameEntryService {
         this.gameRepository = gameRepository;
     }
 
+    private void requireOwnership(Long userId, Long authenticatedUserId, String msg) {
+        if (!userId.equals(authenticatedUserId)) {
+            throw new AccessDeniedException(msg);
+        }
+
+    }
+
     @Transactional
-    public UserGameEntry createEntry(Long userId, Long gameId, GameStatus status, Double score) {
+    public UserGameEntry createEntry(Long userId, Long authenticatedUserId, Long gameId, GameStatus status,
+                                     Double score) {
+        requireOwnership(userId, authenticatedUserId, "You cannot create an entry for another user");
+
         User user = userRepository.findById(userId).orElseThrow(()
             -> new ResourceNotFoundException("User with id " + userId + " not found"));
 
@@ -42,7 +53,9 @@ public class UserGameEntryService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserGameEntryResponse> getEntriesForUser(Long userId) {
+    public List<UserGameEntryResponse> getEntriesForUser(Long userId, Long authenticatedUserId) {
+        requireOwnership(userId, authenticatedUserId, "You cannot access another user's entries");
+
         if (!userRepository.existsById(userId)) {
             throw new ResourceNotFoundException("User with id " + userId + " not found");
         }
@@ -51,7 +64,10 @@ public class UserGameEntryService {
     }
 
     @Transactional
-    public UserGameEntryResponse updateEntry(Long entryId, Long userId, GameStatus status, Double score) {
+    public UserGameEntryResponse updateEntry(Long entryId, Long userId, Long authenticatedUserId, GameStatus status,
+                                             Double score) {
+        requireOwnership(userId, authenticatedUserId, "You cannot access another user's entries");
+
         UserGameEntry entry = userGameEntryRepository.findByIdAndUser_Id(entryId, userId).orElseThrow(()
             -> new ResourceNotFoundException("Entry with id " + entryId + " not found for user " + userId));
         entry.setStatus(status);
@@ -60,7 +76,9 @@ public class UserGameEntryService {
     }
 
     @Transactional
-    public void deleteEntry(Long entryId, Long userId) {
+    public void deleteEntry(Long entryId, Long userId, Long authenticatedUserId) {
+        requireOwnership(userId, authenticatedUserId, "You cannot access another user's entries");
+
         UserGameEntry entry = userGameEntryRepository.findByIdAndUser_Id(entryId, userId).orElseThrow(()
             -> new ResourceNotFoundException("Entry with id " + entryId + " not found for user " + userId));
 

@@ -1,5 +1,6 @@
 package dev.adoria.gamevault.user;
 
+import dev.adoria.gamevault.security.GameVaultUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,10 +21,6 @@ public class GameVaultUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsername(normalizedUsername).orElseThrow(()
             -> new UsernameNotFoundException(normalizedUsername));
 
-        return org.springframework.security.core.userdetails.User
-            .withUsername(user.getUsername())
-            .password(user.getPasswordHash())
-            .roles("USER")
-            .build();
+        return new GameVaultUserDetails(user.getId(), user.getUsername(), user.getPasswordHash());
     }
 }

@@ -41,10 +41,9 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponse getByUsername(String username) {
-        String normalizedUsername = User.normalize(username);
-        User user = userRepository.findByUsername(normalizedUsername).orElseThrow(()
-            -> new ResourceNotFoundException("Username " + normalizedUsername + " not found"));
+    public UserResponse getById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(()
+            -> new ResourceNotFoundException("User with id " + userId + " not found"));
         return UserResponse.from(user);
     }
 }
