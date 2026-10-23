@@ -54,8 +54,9 @@ The API runs at **http://localhost:8080**.
     - [x] Registration and password hashing
     - [x] Session login/logout and CSRF protection
     - [x] Current-user endpoint
-    - [ ] Entry ownership and catalog write permissions
-    - [ ] Consistent API authentication responses
+    - [x] Entry ownership checks
+    - [x] API status codes for login, logout, and unauthenticated access
+    - [ ] Catalog write permissions
 
 - [ ] **Quality and tooling**
     - [ ] Integration tests for accounts, sessions, and ownership
